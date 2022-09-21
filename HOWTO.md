@@ -3,7 +3,6 @@
 - [Introduction](#introduction)
 - [Project Initialization from Scratch](#project-initialization-from-scratch)
 - [Adaptations](#adaptations)
-  - [Device Tree](#device-tree)
   - [Project Configuration](#project-configuration)
     - [Bluetooth](#bluetooth)
     - [Nordic UART Service](#nordic-uart-service)
@@ -45,21 +44,15 @@ The application template (4) must be set to the "hello_world" demo from the nRF 
 
 Afterwards select "Create Application" to continue.
 
-A build configuration has to be created as explained in the README.
+Now a build configuration has to be created as explained in the README.
 
 # Adaptations
-
-## Device Tree
-
-The settings in the device tree file of the board "nrf52833dk_nrf52820" must be changed so that the configuration matches the actual design and the silkscreen on the PAN1781 EVB.
-
-For that the overlay file in *boards\nrf52833dk_nrf52820.overlay* is used which re-routes the I2C pins to the pins matching the PAN1781 EVB.
 
 ## Project Configuration
 
 ![image info](./images/project_configuration.png)
 
-A couple of options are enabled and configured in prj.conf (1) in addition to the one that are already set of the example.
+A couple of options are enabled and configured in prj.conf (1) in addition to the ones that are already set in the "hello world" example.
 
 ### Bluetooth
 

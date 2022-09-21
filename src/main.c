@@ -128,14 +128,14 @@ static int sensor_init(void)
 {
 	int ret;
 
-	i2c_dev = device_get_binding("I2C_0");
+	i2c_dev = DEVICE_DT_GET(DT_NODELABEL(i2c0));
 	if (i2c_dev == NULL)
 	{
 		LOG_ERR("device_get_binding() @ i2c failed");
 		return -1;
 	}
 
-	ret = i2c_configure(i2c_dev, I2C_SPEED_SET(I2C_SPEED_STANDARD) | I2C_MODE_MASTER);
+	ret = i2c_configure(i2c_dev, I2C_SPEED_SET(I2C_SPEED_STANDARD) | I2C_MODE_CONTROLLER);
 	if (ret)
 	{
 		LOG_ERR("i2c_configure() failed");
