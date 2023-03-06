@@ -26,7 +26,7 @@ https://industry.panasonic.eu/products/devices/wireless-connectivity/bluetooth-l
 
 The sensor data of the SN-GCJA5 is collected via I2C and is forwarded as cleartext to a remote device via Bluetooth using the Nordic UART Service (NUS).
 
-The application is based on version v2.1.0 of the nRF Connect SDK by Nordic Semiconductor.
+The application is based on version v2.3.0 of the nRF Connect SDK by Nordic Semiconductor.
 
  https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/getting_started.html
 
@@ -34,7 +34,7 @@ The application is based on version v2.1.0 of the nRF Connect SDK by Nordic Semi
 
 Attach the SN-GCJA5 PM sensor to the PAN1781 EVB as shown in the following picture.
 
-Also make sure to set the jumper on P17 as shown so that the 5V power supply pin is enabled correctly.
+> ⚠️ Also make sure to set the jumper on P17 as shown so that the 5V power supply pin is enabled correctly. otherwise the sensor will not be powered.
 
 ![image info](./images/hardware_setup.png)
 
@@ -45,6 +45,8 @@ Refer to the available online documentation from Nordic Semiconductor that expla
 ![image info](./images/toolchain_manager.png)
 
 Make sure to use the "Toolchain Manager" (1) from the nRF Connect for Desktop application and use the "Open VS Code" option (2) to launch Visual Studio Code.
+
+> ⚠️ Please use the latest version that is available, which is v2.3.0 at the time of the writing of this document.
 
 # Project Initialization
 
@@ -103,13 +105,12 @@ From the "Actions" section (1) choose your attached board and select the "Connec
 A suitable application has to be run on the remote device, for example the "UART" plugin of the "nRF Toolbox" app (1).
 
 ![image info](./images/usage_2.png)
+
+Choose and click the right peripheral device from the list of devices (2).
+
 ![image info](./images/usage_3.png)
 
-Use the "Connect" (1) button and choose the right peripheral device from the list of devices (2).
-
-![image info](./images/usage_4.png)
-
-After the connection has been established, swipe left to make the log output visible where the sensor data are shown.
+After the connection has been established the sensor data are shown in the "Output" window.
 
 # Sensor Data Format
 
