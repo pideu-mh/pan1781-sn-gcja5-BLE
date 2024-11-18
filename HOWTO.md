@@ -16,9 +16,6 @@
   - [Problems with Visual Studio Code](#problems-with-visual-studio-code)
     - [Build Output Does Not Show In Terminal Window](#build-output-does-not-show-in-terminal-window)
     - [Jumping To Compile Error Does Not Work](#jumping-to-compile-error-does-not-work)
-    - [Debugging may not work](#debugging-may-not-work)
-    - [F12 Does Not Work All The Way](#f12-does-not-work-all-the-way)
-    - [Red Curvy Lines All Over The Place](#red-curvy-lines-all-over-the-place)
 
 # Introduction
 
@@ -103,17 +100,3 @@ Sometimes the build output is only shown in the small window in the lower right 
 ### Jumping To Compile Error Does Not Work
 
 Clicking on the error output does not open the offending code right away. Solution: press CTRL and click on the file name in the output.
-
-### Debugging may not work
-
-Debugging may not be working and the error "Failed to launch undefined GDB Server" is displayed. Solution: The root cause of the problem is that Segger J-Link in 32-bit version is expected by Nordic Connect Setup and if it is not available, produces this problem.
-
-Please check out https://devzone.nordicsemi.com/f/nordic-q-a/80062/questions-for-visual-studio-code-at-sdk-connect-v1-7-0 for a discussion how to fix it.
-
-### F12 Does Not Work All The Way
-
-Pressing F12 only brings you to the function declaration, but not to the implementation. Full text search for a function does not reveal the location in the SDK. Currently no solution.
-
-### Red Curvy Lines All Over The Place
-
-Log function calls are getting flagged as erroneous. Currently no solution.
