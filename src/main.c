@@ -239,7 +239,7 @@ static int sensor_process(void)
 	return 0;
 }
 
-void main(void)
+int main(void)
 {
 	int err = 0;
 
@@ -249,28 +249,28 @@ void main(void)
 	if (err)
 	{
 		LOG_ERR("Failed to enable sensor (err: %d)", err);
-		return;
+		return 0;
 	}
 
 	err = bt_enable(NULL);
 	if (err)
 	{
 		LOG_ERR("Failed to enable Bluetooth (err: %d)", err);
-		return;
+		return 0;
 	}
 
 	err = bt_nus_init(&nus_cb);
 	if (err)
 	{
 		LOG_ERR("Failed to initialize UART service (err: %d)", err);
-		return;
+		return 0;
 	}
 
 	err = bt_le_adv_start(BT_LE_ADV_CONN, ad, ARRAY_SIZE(ad), sd, ARRAY_SIZE(sd));
 	if (err)
 	{
 		LOG_ERR("Advertising failed to start (err %d)", err);
-		return;
+		return 0;
 	}
 
 	while(1)
