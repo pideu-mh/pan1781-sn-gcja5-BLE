@@ -171,7 +171,7 @@ variable according to the sensor specification to this variable */
 	
 /* This buffer is used to buffer the message that is being sent to the remote device.
 It must be big enough to hold our string, so CONFIG_BT_NUS_UART_BUFFER_SIZE must be big enough. */
-static uint8_t buf[128];
+static uint8_t buf[160];
 
 /* This function implements the application logic for the sensor handling. */
 static int sensor_process(void)
@@ -197,22 +197,34 @@ static int sensor_process(void)
 	DEFINE_AND_MEASURE_2(pc5_0, 0x14);
 	DEFINE_AND_MEASURE_2(pc7_5, 0x16);
 	DEFINE_AND_MEASURE_2(pc10_0, 0x18);
+//#define SENSOR_SN_GCQB1
+#ifndef SENSOR_SN_GCQB1
+#define FORMAT "ST:%x;PM1.0:%d;PM2.5:%d;PM10:%d;PC0.5:%d;PC1.0:%d;PC2.5:%d;PC5.0:%d;PC7.5:%d;P10.0:%d"
+#define ITEMS status, pm1_0, pm2_5, pm10, pc0_5, pc1_0, pc2_5, pc5_0, pc7_5, pc10_0
+#else
+	DEFINE_AND_MEASURE_4(temperature, 0xf0);
+	DEFINE_AND_MEASURE_4(humidity, 0xf8);
+	DEFINE_AND_MEASURE_4(iaq, 0xe4);
+	DEFINE_AND_MEASURE_4(tvoc, 0xe0);
+	DEFINE_AND_MEASURE_4(eco2, 0xe8);
+#define FORMAT "ST:%x;PM1.0:%d;PM2.5:%d;PM10:%d;PC0.5:%d;PC1.0:%d;PC2.5:%d;PC5.0:%d;PC7.5:%d;P10.0:%d,t:%d,h:%d,iaq:%d,tvoc:%d,eco2:%d"
+#define ITEMS status, pm1_0, pm2_5, pm10, pc0_5, pc1_0, pc2_5, pc5_0, pc7_5, pc10_0, temperature, humidity, iaq, tvoc, eco2
+#endif
+	LOG_INF(FORMAT, ITEMS);
 
-	/* All sensor data is written nicely to our output buffer. */
-	int pos = snprintf(buf, sizeof(buf), "ST:%x;PM1.0:%d;PM2.5:%d;PM10:%d;PC0.5:%d;PC1.0:%d;PC2.5:%d;PC5.0:%d;PC7.5:%d;P10.0:%d\n", status, pm1_0, pm2_5, pm10, pc0_5, pc1_0, pc2_5, pc5_0, pc7_5, pc10_0);
+    /* All sensor data is written nicely to our output buffer. */
+	int pos = snprintf(buf, sizeof(buf), FORMAT"\n", ITEMS);
 	if ((pos < 0) || (pos >= sizeof(buf))) {
 		LOG_ERR("snprintf returned %d", pos);
 		return -ENOMEM;
 	}
-
-	LOG_INF("ST:%x;PM1.0:%d;PM2.5:%d;PM10:%d;PC0.5:%d;PC1.0:%d;PC2.5:%d;PC5.0:%d;PC7.5:%d;P10.0:%d", status, pm1_0, pm2_5, pm10, pc0_5, pc1_0, pc2_5, pc5_0, pc7_5, pc10_0);
 
 	/* The message in the output buffer may be larger than the currently configured MTU
 	size. In that case the output buffer cannot be send in one go, but must be packetized correctly. */
 
 	/* Retrive the maximum allowed message size from the UART service. */
 	uint16_t mtu = bt_nus_get_mtu(current_conn);
-	LOG_INF("string length is %d, mtu %d, buffer size %d", pos, mtu, sizeof(buf));
+//	LOG_INF("string length is %d, mtu %d, buffer size %d", pos, mtu, sizeof(buf));
 
 	/* Later on the mtu variable is used to packetize the data, if necessary. The 
 	buffer has a certain size, but of course the mtu can actually be bigger. If so, 
@@ -226,7 +238,7 @@ static int sensor_process(void)
 	int remaining = pos;
 	while(offset < pos) {
 		int chunk = mtu < remaining ? mtu : remaining;
-		LOG_INF("offset %d, pos %d, chunk %d", offset, pos, chunk);	
+//		LOG_INF("offset %d, pos %d, chunk %d", offset, pos, chunk);
 		ret = bt_nus_send(current_conn, &buf[offset], chunk);
 		if(ret) {
 			LOG_ERR("Failed to send data (err: %d)", ret);
